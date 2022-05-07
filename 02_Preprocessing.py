@@ -15,8 +15,13 @@ from tabulate import tabulate
 
 
 # =============================================================================
-# PARAMETROS:
-PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
+# PARAMETROS SERGI:
+#PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
+#DATASETS_DIR = PATH + "data\\"
+#OUTPUT_DIR = PATH + "output\\"
+
+# PARAMETROS MARC:
+PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG"
 DATASETS_DIR = PATH + "data\\"
 OUTPUT_DIR = PATH + "output\\"
 

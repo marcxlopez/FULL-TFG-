@@ -12,10 +12,17 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 
-# Web scrapper for infinite scrolling page 
+# Web scrapper for infinite scrolling page  SERGI
 PATH = "E:\chromedriver\chromedriver.exe"
 DATASETS_DIR = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\data"
 DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
+
+#web scrapper MARC
+
+#PATH = r"C:\Users\marcl\Desktop\TFG\WEB SCRAPPING\webscrapping2\chromedriver.exe"
+#DATASETS_DIR = r"C:\\Users\\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG\\data"
+#DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
+
 
 OPTIONS = webdriver.ChromeOptions()
 OPTIONS.add_argument("--start-maximized")
