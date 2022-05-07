@@ -21,7 +21,7 @@ from tabulate import tabulate
 #OUTPUT_DIR = PATH + "output\\"
 
 # PARAMETROS MARC:
-PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG"
+PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\"
 DATASETS_DIR = PATH + "data\\"
 OUTPUT_DIR = PATH + "output\\"
 
