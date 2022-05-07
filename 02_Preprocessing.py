@@ -21,7 +21,6 @@ OUTPUT_DIR = PATH + "output\\"
 # =============================================================================
 # Cargamos los datos que hemos scrappeado
 hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesIBIZA.pkl')
-hoteles.columns
 
 # =============================================================================
 # Realizamos el PREPROCESSING:
@@ -50,6 +49,31 @@ hotelPR
 ### Transporte 
 # -----------------------------------------------------------------------------
 ### tamanyo 
+
+import re
+plantas = [re.findall(r'[0-9]+ planta', x) for x in hoteles.tamanyo]
+plantas = [re.sub(" planta", "", str(p)) for p in plantas]
+
+plantas_final =  []
+for p in plantas: 
+    try: 
+        plantas_final.append(int(p[2]))
+    except:
+        plantas_final.append(0)
+        
+habitaciones = [re.findall(r'[0-9]+ habita', x) for x in hoteles.tamanyo]
+habitaciones = [re.sub(" habita", "", str(h)) for h in habitaciones]
+
+habitaciones_final =  []
+for p in habitaciones: 
+    try: 
+        habitaciones_final.append(int(p[2]))
+    except:
+        habitaciones_final.append(0)
+        
+        
+
+
 # -----------------------------------------------------------------------------
 ### mascotas 
 # -----------------------------------------------------------------------------
