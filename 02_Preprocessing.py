@@ -136,7 +136,6 @@ hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenada
 hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenadas']]
 
 #### Calculamos la distancia entre puntos de interes
-<<<<<<< HEAD
 ####### Ponemos un ejemplo: Ayuntamiento de Ibiza
 lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
 
@@ -150,7 +149,7 @@ distancias = pd.DataFrame()
 for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como lugares de interes haya
     distancia = []    
     # Realizamos el bucle para todos los hoteles de la base de datos
-    coordComparar = (lugares_interes.latitud[j], lugaresInteres.longitud[j])
+    coordComparar = (lugares_interes.latitud[j], lugares_interes.longitud[j])
     for i in range(0, hoteles.shape[0]): #realizar bucle tantas veces como hoteles haya 
         coords_2 = (hoteles.latitud[i], hoteles.longitud[i])
         distancia.append(geopy.distance.geodesic(coordComparar, coords_2).km)
