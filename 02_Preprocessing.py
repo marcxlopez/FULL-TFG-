@@ -12,7 +12,7 @@ import pandas as pd
 import re
 import string
 from tabulate import tabulate
-
+from math import sin, cos, sqrt, atan2, radians
 
 # =============================================================================
 # PARAMETROS SERGI:
@@ -134,6 +134,44 @@ hotelPR['ratioHabPlanta'] = hotelPR['habitaciones']/hotelPR['Plantas']
 hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenadas']]
 hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenadas']]
 
+#### Calculamos la distancia entre puntos de interes
+#create a data frarames de lugares de interes y distancia de hotel 
+lugares_interes = pd.DataFrame(column = [ 'nombre','latitud', 'longitud'])
+hotel_distance = pd.DataFrame(column = ['hotel', 'nombre', 'distance'])
+#i = 0 and z = 1 and t = 2 x = 0
+#lat1 will be lugares_interes [i][z] and lon1 will be lugares_interes [i][t]
+#lat2 will be hotelPR['latitud'][x] and lon2 will be hotelPR['longitud'][x]
+i = 0
+z = 1
+t = 2
+x = 0
+R = 6373.0
+
+distance = pd.DataFrame()
+while x < len(hotelPR):
+    
+    lat1 = lugares_interes [i][z]
+    lon1 = lugares_interes [i][t]
+    lat2 = hotelPR['latitud'][x]
+    lon2 = hotelPR['longitud'][x]
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distance = R * c
+    i = i + 1
+    #add information to hotel_distance
+    hotel_distance.loc[x] = [hotelPR['hotel'][x], lugares_interes ['nombre'][i], distance]
+    
+  
+
+    if i > len(lugares_interes):
+        x = x + 1
+
+    if x > len(hotelPR):
+        break
+
+
 # -----------------------------------------------------------------------------
 ### precio
 hotelPR['precio'] = [float(re.sub(" €", "", pr)) if pr != '' else float("nan") for pr in hoteles['precio']]
@@ -144,3 +182,5 @@ hotelPR.to_pickle(DATASETS_DIR + "HotelesPreprocesados.pkl")
 hotelPR.to_csv(DATASETS_DIR + "HotelesPreprocesados.csv")
 
 # =============================================================================
+
+
