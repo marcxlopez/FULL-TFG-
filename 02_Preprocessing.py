@@ -144,40 +144,6 @@ lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
 # nombre = "Ayuntamiento"
 # latitud = 38.9070794
 # longitud = 1.4292239
-=======
-#create a data frarames de lugares de interes y distancia de hotel 
-lugares_interes = pd.DataFrame(column = [ 'nombre','latitud', 'longitud'])
-luga
-hotel_distance = pd.DataFrame(column = ['hotel', 'nombre', 'distance'])
-#i = 0 and z = 1 and t = 2 x = 0
-#lat1 will be lugares_interes [i][z] and lon1 will be lugares_interes [i][t]
-#lat2 will be hotelPR['latitud'][x] and lon2 will be hotelPR['longitud'][x]
-i = 0
-z = 1
-t = 2
-x = 0
-R = 6373.0
-
-distance = pd.DataFrame()
-while x < len(hotelPR):
-    
-    lat1 = radians(lugares_interes [i][z])
-    lon1 = radians(lugares_interes [i][t])
-    lat2 = radians(hotelPR['latitud'][x])
-    lon2 = radians(hotelPR['longitud'][x])
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = R * c
-    i = i + 1
-    #add information to hotel_distance
-    hotel_distance.loc[x] = [hotelPR['hotel'][x], lugares_interes ['nombre'][i], distance]
-    
-  
->>>>>>> 227d9f6ddc234fcb1fe218fc8a3965669a0a661d
-
-
 
 for j in range(0, lugares_interes.shape[0]):
     distancia = []    
