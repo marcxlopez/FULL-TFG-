@@ -144,17 +144,21 @@ lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
 # nombre = "Ayuntamiento"
 # latitud = 38.9070794
 # longitud = 1.4292239
+lugares_interes = lugares_interes.append({'nombre': 'Ayuntamiento', 'latitud': 38.9070794, 'longitud': 1.4292239}, ignore_index=True)
+distancias = pd.DataFrame()
 
-for j in range(0, lugares_interes.shape[0]):
+for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como lugares de interes haya
     distancia = []    
     # Realizamos el bucle para todos los hoteles de la base de datos
     coordComparar = (lugares_interes.latitud[j], lugaresInteres.longitud[j])
-    for i in range(0, hoteles.shape[0]):
+    for i in range(0, hoteles.shape[0]): #realizar bucle tantas veces como hoteles haya 
         coords_2 = (hoteles.latitud[i], hoteles.longitud[i])
         distancia.append(geopy.distance.geodesic(coordComparar, coords_2).km)
 
-    # Añadimos las distancias calculadas al dataframe de distancias
+    # Añadimos las distancias calculadas al dataframe de distancias ( me falta saber que qu)
     hotelPR['Prox_' + lugaresInteres.nombre[j]] <- distancia
+    
+
 
 # -----------------------------------------------------------------------------
 ### precio
