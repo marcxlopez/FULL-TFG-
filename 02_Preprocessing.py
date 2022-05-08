@@ -137,6 +137,7 @@ hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenad
 #### Calculamos la distancia entre puntos de interes
 #create a data frarames de lugares de interes y distancia de hotel 
 lugares_interes = pd.DataFrame(column = [ 'nombre','latitud', 'longitud'])
+luga
 hotel_distance = pd.DataFrame(column = ['hotel', 'nombre', 'distance'])
 #i = 0 and z = 1 and t = 2 x = 0
 #lat1 will be lugares_interes [i][z] and lon1 will be lugares_interes [i][t]
@@ -150,10 +151,10 @@ R = 6373.0
 distance = pd.DataFrame()
 while x < len(hotelPR):
     
-    lat1 = lugares_interes [i][z]
-    lon1 = lugares_interes [i][t]
-    lat2 = hotelPR['latitud'][x]
-    lon2 = hotelPR['longitud'][x]
+    lat1 = radians(lugares_interes [i][z])
+    lon1 = radians(lugares_interes [i][t])
+    lat2 = radians(hotelPR['latitud'][x])
+    lon2 = radians(hotelPR['longitud'][x])
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
