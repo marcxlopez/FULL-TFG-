@@ -12,8 +12,9 @@ import pandas as pd
 import re
 import string
 from tabulate import tabulate
-from math import sin, cos, sqrt, atan2, radians
+import geopy.distance
 
+# from math import sin, cos, sqrt, atan2, radians
 # =============================================================================
 # PARAMETROS SERGI:
 #PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
@@ -135,42 +136,26 @@ hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenada
 hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenadas']]
 
 #### Calculamos la distancia entre puntos de interes
-#create a data frarames de lugares de interes y distancia de hotel 
-lugares_interes = pd.DataFrame(column = [ 'nombre','latitud', 'longitud'])
-hotel_distance = pd.DataFrame(column = ['hotel', 'nombre', 'distance'])
-#i = 0 and z = 1 and t = 2 x = 0
-#lat1 will be lugares_interes [i][z] and lon1 will be lugares_interes [i][t]
-#lat2 will be hotelPR['latitud'][x] and lon2 will be hotelPR['longitud'][x]
-i = 0
-z = 1
-t = 2
-x = 0
-R = 6373.0
+####### Ponemos un ejemplo: Ayuntamiento de Ibiza
+lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
 
-distance = pd.DataFrame()
-while x < len(hotelPR):
-    
-    lat1 = lugares_interes [i][z]
-    lon1 = lugares_interes [i][t]
-    lat2 = hotelPR['latitud'][x]
-    lon2 = hotelPR['longitud'][x]
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = R * c
-    i = i + 1
-    #add information to hotel_distance
-    hotel_distance.loc[x] = [hotelPR['hotel'][x], lugares_interes ['nombre'][i], distance]
-    
-  
+## Añadir estos valores en el data frame lugares_interes
+# nombre = "Ayuntamiento"
+# latitud = 38.9070794
+# longitud = 1.4292239
 
-    if i > len(lugares_interes):
-        x = x + 1
 
-    if x > len(hotelPR):
-        break
 
+for j in range(0, lugares_interes.shape[0]):
+    distancia = []    
+    # Realizamos el bucle para todos los hoteles de la base de datos
+    coordComparar = (lugares_interes.latitud[j], lugaresInteres.longitud[j])
+    for i in range(0, hoteles.shape[0]):
+        coords_2 = (hoteles.latitud[i], hoteles.longitud[i])
+        distancia.append(geopy.distance.geodesic(coordComparar, coords_2).km)
+
+    # Añadimos las distancias calculadas al dataframe de distancias
+    hotelPR['Prox_' + lugaresInteres.nombre[j]] <- distancia
 
 # -----------------------------------------------------------------------------
 ### precio
