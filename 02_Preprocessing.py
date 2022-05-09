@@ -144,7 +144,6 @@ lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
 # latitud = 38.9070794
 # longitud = 1.4292239
 lugares_interes = lugares_interes.append({'nombre': 'Ayuntamiento', 'latitud': 38.9070794, 'longitud': 1.4292239}, ignore_index=True)
-distancias = pd.DataFrame()
 
 for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como lugares de interes haya
     distancia = []    
@@ -157,8 +156,6 @@ for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como l
     # Añadimos las distancias calculadas al dataframe de distancias ( me falta saber que qu)
     hotelPR['Prox_' + lugaresInteres.nombre[j]] = distancia
     
-
-
 # -----------------------------------------------------------------------------
 ### precio
 hotelPR['precio'] = [float(re.sub(" €", "", pr)) if pr != '' else float("nan") for pr in hoteles['precio']]
