@@ -1,7 +1,7 @@
 from distutils.log import info
 import time
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import urllib
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -56,9 +56,9 @@ hab = 1
 senior = 2
 child = 0
 id_poblacio = "1641629" 
-check_in = datetime.strptime('2022-04-22', "%Y-%m-%d")
-check_out = datetime.strptime('2022-04-24', "%Y-%m-%d")
-check_Final = datetime.strptime('2022-04-25',"%Y-%m-%d")
+check_in = datetime.strptime('2022-07-01', "%Y-%m-%d")
+check_out = datetime.strptime('2022-07-02', "%Y-%m-%d")
+check_Final = datetime.strptime('2022-07-31',"%Y-%m-%d")
 sigo = True 
 
 #empezamos bucle de dias 
@@ -113,9 +113,7 @@ while sigo == True:
     
     # for url in urls:
     #   print(url)
-    
-    
-    
+        
     for hotel in urls:
         # Abrimos el hotel
         driver.get(hotel)
@@ -253,7 +251,7 @@ while sigo == True:
     driver.close()
     
     #SEGUIMOS CON EL BUCLE SUMANDO UN DIA A CHEKCIN Y CHECK OUT
-    if (check_in < checkFinal) :
+    if (check_in < check_Final) :
         sigo = True 
         check_in = check_in + timedelta(days=1)
         check_out = check_out + timedelta(days=1)
@@ -262,7 +260,8 @@ while sigo == True:
         
 
 # AGREGAMOS TODA LA INFORMACIÓN EN UN DATA FRAME
-dict = {'Hotel': nombresHotel, 'Estrellas': estrellas, 'Ratio': ratios, 
+dict = {'Hotel': nombresHotel, 'checkIn': checkIn, 'checkOut': checkOut, 
+        'Estrellas': estrellas, 'Ratio': ratios, 
         'Ratio_descr': ratiosTexto, 'Direcciones': direcciones, "Ammenities":ammenities, 
         'Servicios_Principales':serviciosPrincipales, 'CaractFamilias':familias, 
         'lugaresInteres':lugaresInteres, 'Transporte':transporte, 'tamanyo': tamanyoAlojamiento, 
