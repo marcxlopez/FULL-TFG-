@@ -136,8 +136,19 @@ hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenada
 hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenadas']]
 
 #### Calculamos la distancia entre puntos de interes
-####### Ponemos un ejemplo: Ayuntamiento de Ibiza
-lugares_interes = pd.DataFrame(columns=['nombre', 'latitud', 'longitud'])
+#creamos DataFrame con los lugares de interes
+nombre = ['Dalt Vila','Ses Salines',
+'Sant Antoni de Portmany',"Cala d'Hort",'Puerto de Ibiza',
+'Santa Eulária des Riu','Cala Benirrás','Sant Joan de Labritja','Cala Portinatx',
+'Sant Josep de sa Talaia','Aeropuerto de Ibiza','Cala Comte','Cala de Sant Vicent']
+latitud = [38.906613,38.5030,38.9806800,38.890,38.9089,38.9833,39.107,39.0778,39.1104253,38.9217,38.87294785,38.9634,39.0433]
+longitud = [1.436293,1.2318,1.3036200,1.2235,1.43238,1.51667,1.5374,1.51227,1.5181252, 1.29344,1.370372,1.2246, 1.3524]
+
+
+
+#crear dataframe lugares_interes con los datos de nombre, latitud y longitud
+lugares_interes = pd.DataFrame({'nombre':nombre,'latitud':latitud,'longitud':longitud})
+
 
 ## Añadir estos valores en el data frame lugares_interes
 # nombre = "Ayuntamiento"
