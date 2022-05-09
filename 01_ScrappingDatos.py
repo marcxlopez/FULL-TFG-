@@ -91,6 +91,7 @@ while sigo == True:
     while True:
         # scroll one screen height each time
         driver.execute_script("window.scrollTo(0, {screen_height}*{i});".format(screen_height=screen_height, i=i))  
+        time.sleep(4)
         #CERRAMOS LAS COOKIES 
         element = driver.find_element_by_xpath("""/html/body/div[1]/div[2]/div[2]/button[2]""")
         #aceptarcook.click()

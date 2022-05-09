@@ -36,6 +36,34 @@ hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesIBIZA.pkl')
 hotelPR = pd.DataFrame(hoteles.Hotel)
 
 # -----------------------------------------------------------------------------
+### CheckIn
+# nos aseguramos de que omisiones no generen error 
+fechaIn = pd.to_datetime(data.checkIn, format='%Y-%m-%d', errors = 'coerce')
+fechaOut = pd.to_datetime(data.checkOut, format='%Y-%m-%d', errors = 'coerce')
+
+day_cin = fechaIn.dt.weekday
+month_cin = fechaIn.dt.month
+
+#creamos las dos variables de check out 
+
+#### Calcular dia de la semana
+data['LaboralEntrada'] = [meses[i] for i in month_cin]
+
+#### Calcular el mes
+data['MesEntrada'] = [days[x] for x in day_cin]
+
+# -----------------------------------------------------------------------------
+### CheckOut
+day_cout = fechaOut.dt.weekday
+month_cout = fechaOut.dt.month
+
+#### Calcular dia de la semana
+hotelPR['CheckOutSem'] = [days[x] for x in day_cin]
+
+#### Calcular el mes
+hotelPR['CheckOutMes'] = [meses[i] for i in month_cin]
+
+# -----------------------------------------------------------------------------
 ### Estrellas
 estrellas = [re.sub(" estrellas| estrella", "", estr) for estr in hoteles['Estrellas']]
 hotelPR['Estrellas'] = [float(estr) if estr != '' else float("nan") for estr in estrellas ]
