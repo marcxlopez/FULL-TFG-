@@ -96,4 +96,5 @@ hoteles['distanciaKm'] <- hoteles$distancia/1000
 
 # ===========================================================
 # Guardamos el fichero en csv para insertarlo en el python posteriormente
+hoteles <- hoteles[, c("Hotel", "distancia", "distanciaKm")]
 write.csv2(hoteles, file = paste0(DATADIR, 'DistanciaHoteles.csv'), row.names = FALSE)
