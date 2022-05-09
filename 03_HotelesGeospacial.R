@@ -1,7 +1,7 @@
 # ===========================================================
 # Cargamos los paquetes necesarios
 list.of.packages = c("tmap", "ggmap", "tmaptools", "sp", 
-                     "sf", "ggplot2", "redlistr") 
+                     "sf", "ggplot2") 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages) > 0) {
   install.packages(new.packages)
@@ -25,7 +25,7 @@ mapa <- rgdal::readOGR(paste0(fichero_mapa))
 mapa <- spTransform(mapa, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
 
 mapaBaleares <- mapa[which(mapa$CPRO == '07'), ]
-plot(mapaBaleares)
+# plot(mapaBaleares)
 
 # -----------------------------------------------------------
 # Nos quedamos con la provincia de islas balerares
@@ -36,7 +36,7 @@ plot(mapaIbiza)
 # ===========================================================
 # Convertimos los puntos de los hoteles
 spHotels <- SpatialPoints(hoteles[,c("longitud", "latitud")])
-CRS(spHotels) <- "+proj=longlat +ellps=WGS84 +datum=WGS84"
+# CRS(spHotels) <- "+proj=longlat +ellps=WGS84 +datum=WGS84"
 HotelesSP <- SpatialPointsDataFrame(spHotels, data.frame(hoteles$Hotel))
 
 # -----------------------------------------------------------
@@ -52,11 +52,11 @@ st_crs(puntos) <- st_crs(mapaSF)
 
 # ===========================================================
 # Grafiquem les distancies als punts
-ggplot() + 
-  geom_sf(data = st_nearest_points(puntos, mapaSF)) + 
-  geom_sf(data = mapaSF) +
-  geom_sf(data = puntos) +
-  coord_sf(xlim = c(0, 3), ylim = c(37, 40))
+# ggplot() + 
+#   geom_sf(data = st_nearest_points(puntos, mapaSF)) + 
+#   geom_sf(data = mapaSF) +
+#   geom_sf(data = puntos) +
+#   coord_sf(xlim = c(0, 3), ylim = c(37, 40))
 
 # ===========================================================
 # Creo un cuadrado con las dimensiones para insertar dentro el mapa
@@ -65,7 +65,6 @@ xmin = floor(st_bbox(mapaSF)[1])
 xmax = round(st_bbox(mapaSF)[3], 0) + 0.5
 ymin = floor(st_bbox(mapaSF)[2])
 ymax = round(st_bbox(mapaSF)[4], 0) + 0.5
-
 
 # Genero el mapa cuadrado coincidente con la isla
 mapacuadrado <- as(raster::extent(xmin, xmax, ymin, ymax), "SpatialPolygons")
