@@ -155,7 +155,7 @@ for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como l
         distancia.append(geopy.distance.geodesic(coordComparar, coords_2).km)
 
     # Añadimos las distancias calculadas al dataframe de distancias ( me falta saber que qu)
-    hotelPR['Prox_' + lugaresInteres.nombre[j]] <- distancia
+    hotelPR['Prox_' + lugaresInteres.nombre[j]] = distancia
     
 
 
