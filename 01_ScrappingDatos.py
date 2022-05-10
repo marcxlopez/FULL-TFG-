@@ -13,15 +13,15 @@ from urllib.parse import parse_qs
 
 
 # Web scrapper for infinite scrolling page  SERGI
-PATH = "E:\chromedriver\chromedriver.exe"
-DATASETS_DIR = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\data"
-DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
+#PATH = "E:\chromedriver\chromedriver.exe"
+#DATASETS_DIR = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\data"
+#DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
 
 #web scrapper MARC
 
-#PATH = r"C:\Users\marcl\Desktop\TFG\WEB SCRAPPING\webscrapping2\chromedriver.exe"
-#DATASETS_DIR = r"C:\\Users\\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG\\data"
-#DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
+PATH = r"C:\Users\marcl\Desktop\TFG\WEB SCRAPPING\webscrapping2\chromedriver.exe"
+DATASETS_DIR = r"C:\\Users\\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG\\data"
+DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
 
 
 OPTIONS = webdriver.ChromeOptions()
@@ -58,7 +58,7 @@ child = 0
 id_poblacio = "1641629" 
 check_in = datetime.strptime('2022-07-01', "%Y-%m-%d")
 check_out = datetime.strptime('2022-07-02', "%Y-%m-%d")
-check_Final = datetime.strptime('2022-07-31',"%Y-%m-%d")
+check_Final = datetime.strptime('2022-07-5',"%Y-%m-%d")
 sigo = True 
 
 #empezamos bucle de dias 

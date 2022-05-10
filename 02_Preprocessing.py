@@ -13,6 +13,7 @@ import re
 import string
 from tabulate import tabulate
 import geopy.distance
+from datetime import timedelta
 
 # from math import sin, cos, sqrt, atan2, radians
 # =============================================================================
@@ -38,8 +39,8 @@ hotelPR = pd.DataFrame(hoteles.Hotel)
 # -----------------------------------------------------------------------------
 ### CheckIn
 # nos aseguramos de que omisiones no generen error 
-fechaIn = pd.to_datetime(data.checkIn, format='%Y-%m-%d', errors = 'coerce')
-fechaOut = pd.to_datetime(data.checkOut, format='%Y-%m-%d', errors = 'coerce')
+fechaIn = pd.to_datetime(hoteles.checkIn, format='%Y-%m-%d', errors = 'coerce')
+fechaOut = pd.to_datetime(hoteles.checkOut, format='%Y-%m-%d', errors = 'coerce')
 
 day_cin = fechaIn.dt.weekday
 month_cin = fechaIn.dt.month
@@ -47,21 +48,21 @@ month_cin = fechaIn.dt.month
 #creamos las dos variables de check out 
 
 #### Calcular dia de la semana
-data['LaboralEntrada'] = [meses[i] for i in month_cin]
+hotelPR['MesEntrada'] = [month_cin[i] for i in month_cin]
 
 #### Calcular el mes
-data['MesEntrada'] = [days[x] for x in day_cin]
+hotelPR['DiaEntrada'] = [day_cin[x] for x in day_cin]
 
 # -----------------------------------------------------------------------------
+
 ### CheckOut
 day_cout = fechaOut.dt.weekday
 month_cout = fechaOut.dt.month
 
 #### Calcular dia de la semana
-hotelPR['CheckOutSem'] = [days[x] for x in day_cin]
+hotelPR['DiaSalida'] = [day_cout[i] for i in day_cout]
+hotelPR['MesSalida'] = [month_cout[x] for x in month_cout]
 
-#### Calcular el mes
-hotelPR['CheckOutMes'] = [meses[i] for i in month_cin]
 
 # -----------------------------------------------------------------------------
 ### Estrellas
@@ -188,21 +189,34 @@ for j in range(0, lugares_interes.shape[0]): #realizar bucle tantas veces como l
     distancia = []    
     # Realizamos el bucle para todos los hoteles de la base de datos
     coordComparar = (lugares_interes.latitud[j], lugares_interes.longitud[j])
-    for i in range(0, hoteles.shape[0]): #realizar bucle tantas veces como hoteles haya 
-        coords_2 = (hoteles.latitud[i], hoteles.longitud[i])
+    for i in range(0, hotelPR.shape[0]): #realizar bucle tantas veces como hoteles haya 
+        coords_2 = (hotelPR.latitud[i], hotelPR.longitud[i])
         distancia.append(geopy.distance.geodesic(coordComparar, coords_2).km)
 
     # Añadimos las distancias calculadas al dataframe de distancias ( me falta saber que qu)
-    hotelPR['Prox_' + lugaresInteres.nombre[j]] = distancia
+    hotelPR['Prox_' + lugares_interes.nombre[j]] = distancia
     
 # -----------------------------------------------------------------------------
-### precio
-hotelPR['precio'] = [float(re.sub(" €", "", pr)) if pr != '' else float("nan") for pr in hoteles['precio']]
+###HOTEL PRECIO (funciona, pero hay bastantes NaN)
+#extraer los valores anteriores al simbolo del euro
+hotelPR['precios'] = [re.sub("\€", "", x) for x in hoteles['precio']]
+#si hotelPR['precios'] tiene un simbolo de %, extraemos el valor 
+hotelPR['precios'] = [re.sub("\%", "", x) for x in hotelPR['precios']]
+#convertimos a float hotelPR['precios']
+hotelPR['precios'] = [float(x) if x != '' else None for x in hotelPR['precios']]
+#eliminamos los valores negativos 
+hotelPR['precios'] = [x if x > 0 else float("nan") for x in hotelPR['precios']]
+     
+
+
+#NO ME FUNCIONA ESTO 
+#hotelPR['precio'] = [float(re.sub(" €", "", pr)) if pr != '' else float("nan") for pr in hoteles['precio']]
+
 
 # =============================================================================
 # Guardamos en formato de pickle
 hotelPR.to_pickle(DATASETS_DIR + "HotelesPreprocesados.pkl")
-hotelPR.to_csv(DATASETS_DIR + "HotelesPreprocesados.csv")
+hotelPR.to_csv(DATASETS_DIR + "HotelesPreprocesados.csv",";")
 
 # =============================================================================
 
