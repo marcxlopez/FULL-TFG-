@@ -11,8 +11,12 @@ rm(list.of.packages, new.packages)
 
 # ===========================================================
 # Parámetros necesarios
-DATADIR <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
-SHAPEFILEDIR <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/input/seccionado_2022/España_Seccionado2022_ETRS89H30/'
+#DATADIR <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
+#SHAPEFILEDIR <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/input/seccionado_2022/España_Seccionado2022_ETRS89H30/'
+
+# Parámetros necesarios MARC 
+DATADIR <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/data/'
+SHAPEFILEDIR <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/input/seccionado_2022/España_Seccionado2022_ETRS89H302/'
 
 # ===========================================================
 # Cargamos la base de datos
@@ -20,6 +24,7 @@ hoteles <- read.csv(paste0(DATADIR, 'HotelesPreprocesados.csv'))
 
 # ===========================================================
 # Cargamos el mapa de secciones censales
+#install.packages("rgdal")
 fichero_mapa <- paste0(SHAPEFILEDIR, "SECC_CE_20220101.shp")
 mapa <- rgdal::readOGR(paste0(fichero_mapa))
 mapa <- spTransform(mapa, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))

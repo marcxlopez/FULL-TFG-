@@ -17,14 +17,14 @@ import geopy.distance
 
 # =============================================================================
 # PARAMETROS SERGI:
-PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
-DATASETS_DIR = PATH + "data\\"
-OUTPUT_DIR = PATH + "output\\"
+#PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
+#DATASETS_DIR = PATH + "data\\"
+#OUTPUT_DIR = PATH + "output\\"
 
 # PARAMETROS MARC:
-# PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\"
-# DATASETS_DIR = PATH + "data\\"
-# OUTPUT_DIR = PATH + "output\\"
+PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\"
+DATASETS_DIR = PATH + "data\\"
+OUTPUT_DIR = PATH + "output\\"
 
 # =============================================================================
 # Cargamos los datos que hemos scrappeado
