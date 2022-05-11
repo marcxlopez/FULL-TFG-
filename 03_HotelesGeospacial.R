@@ -9,6 +9,7 @@ if(length(new.packages) > 0) {
 lapply(list.of.packages, require, character.only = T)
 rm(list.of.packages, new.packages)
 
+
 # ===========================================================
 # Parámetros necesarios
 #DATADIR <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
@@ -16,12 +17,12 @@ rm(list.of.packages, new.packages)
 
 # Parámetros necesarios MARC 
 DATADIR <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/data/'
-SHAPEFILEDIR <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/input/seccionado_2022/España_Seccionado2022_ETRS89H302/'
+SHAPEFILEDIR <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/input/seccionado_2022/España_Seccionado2022_ETRS89H30/'
 
 # ===========================================================
 # Cargamos la base de datos
-hoteles <- read.csv(paste0(DATADIR, 'HotelesPreprocesados.csv'))
-
+#hoteles <- read.csv(paste0(DATADIR, 'HotelesPreprocesados.csv'))
+hoteles  <- read.csv(paste0(DATADIR, 'HotelesPreprocesados.csv'), sep = ';')
 # ===========================================================
 # Cargamos el mapa de secciones censales
 #install.packages("rgdal")
@@ -102,3 +103,4 @@ hoteles['distanciaKm'] <- hoteles$distancia/1000
 # Guardamos el fichero en csv para insertarlo en el python posteriormente
 hoteles <- hoteles[, c("Hotel", "distancia", "distanciaKm")]
 write.csv2(hoteles, file = paste0(DATADIR, 'DistanciaHoteles.csv'), row.names = FALSE)
+
