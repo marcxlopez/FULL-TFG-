@@ -41,6 +41,6 @@ hotelesDist = pd.merge(hoteles, distancias,  how = "left", on = 'Hotel')
 # =============================================================================
 # Guardamos en formato de pickle
 hotelesDist.to_pickle(DATASETS_DIR + "HotelesModelos.pkl")
-hotelesDist.to_csv(DATASETS_DIR + "HotelesModelos.csv")
+hotelesDist.to_csv(DATASETS_DIR + "HotelesModelos.csv",sep=';')
 
 # =============================================================================
