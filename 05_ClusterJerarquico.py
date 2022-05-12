@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 ## Librerias para los clusters
 import scipy.cluster.hierarchy as shc
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score,accuracy_score
 
 
 # =============================================================================
@@ -71,12 +71,14 @@ for k in kden:
     # Calculamos el estadístico de sillhouete para ver cual es la mejor agrupación
     silluete.append(silhouette_score(hotelesNorm, cluster.labels_, metric = 'euclidean', 
                      random_state = 0))
-    
+    #printeamos el estadístico de sillhouete
+    print("El estadístico de sillhouete para k = " + str(k) + " es: " + str(silluete[-1]))
 # Graficamos el estadistico de la sillhouete
 plt.plot(kden, silluete, '--bo', label = 'Sillhouette')
 
 # Seleccionamos el mejor
-kOptima = kden[np.argmax(silluete)]
+#kOptima = kden[np.argmax(silluete)] #me coge 6
+kOptima = 2 #est sillhouete o.431
 
 # Calculamos la clasificación con el número k 
 cluster = AgglomerativeClustering(n_clusters = kOptima, affinity = 'euclidean', 
@@ -94,5 +96,16 @@ plt.title('Clustering Jerárquico con k =' + str(kOptima))
 plt.legend(range(1, kOptima + 1))
 
 # =============================================================================
-
+###Adjusted Rand Index
         
+labels_pred = cluster.labels_
+labels_true = hoteles['precios']
+from sklearn.metrics.cluster import adjusted_rand_score
+adjusted_rand_score(labels_true, labels_pred)
+
+###Silhouette Coefficient
+from sklearn import metrics.silhouette_score
+from sklearn.metrics import pairwise_distances
+
+
+
