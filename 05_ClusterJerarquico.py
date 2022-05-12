@@ -132,7 +132,7 @@ plt.scatter(hotelesNorm['precios'], hotelesNorm['distancia'],
             c = kmeans.labels_) 
 plt.xlabel('precios')
 plt.ylabel('distancia')
-plt.title('Clustering K-Means con k =' + str(kOptima))
+plt.title('Clustering K-Means con k = 2')
 plt.legend(range(1, kOptima + 1))
 
 
