@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May 12 10:34:35 2022
-
+https://www.datacamp.com/tutorial/xgboost-in-python#hyperparameters
+https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
 @author: marcl
 """
 
@@ -11,6 +12,11 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
+
+
 # =============================================================================
 # PARAMETROS SERGI:
 #PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
@@ -78,3 +84,16 @@ xg_reg = xgb.train(params=params, dtrain=data_dmatrix, num_boost_round=10)
 xgb.plot_importance(xg_reg)
 plt.rcParams['figure.figsize'] = [5, 5]
 plt.show()
+
+
+#==============================================================================
+param_test1 = {
+ 'max_depth':range(3,10,2),
+ 'min_child_weight':range(1,6,2)
+}
+gsearch1 = GridSearchCV(estimator = XGBClassifier( learning_rate =0.1, n_estimators=140, max_depth=5,
+ min_child_weight=1, gamma=0, subsample=0.8, colsample_bytree=0.8,
+ objective= 'binary:logistic', nthread=4, scale_pos_weight=1, seed=27), 
+ param_grid = param_test1, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch1.fit(train[predictors],train[target])
+gsearch1.grid_scores_, gsearch1.best_params_, gsearch1.best_score_
