@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import scipy.cluster.hierarchy as shc
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score,accuracy_score
-
+from sklearn.cluster import KMeans
 
 # =============================================================================
 # Parámetros del modelo: 
@@ -77,8 +77,8 @@ for k in kden:
 plt.plot(kden, silluete, '--bo', label = 'Sillhouette')
 
 # Seleccionamos el mejor
-#kOptima = kden[np.argmax(silluete)] #me coge 6
-kOptima = 2 #est sillhouete o.431
+kOptima = kden[np.argmax(silluete)] #me coge 6
+#kOptima = 2 #est sillhouete o.431
 
 # Calculamos la clasificación con el número k 
 cluster = AgglomerativeClustering(n_clusters = kOptima, affinity = 'euclidean', 
@@ -103,9 +103,39 @@ labels_true = hoteles['precios']
 from sklearn.metrics.cluster import adjusted_rand_score
 adjusted_rand_score(labels_true, labels_pred)
 
-###Silhouette Coefficient
-from sklearn import metrics.silhouette_score
-from sklearn.metrics import pairwise_distances
+#------------------------------------------------------------------------------
+
+################################################################################
+###Bucle para realizar diferentes clusterings KMEANS 
+#comparar COEFICIENTE DE SILHOUETTE
+
+for k in range(2,8):
+    #realizar el clustering
+    kmeans = KMeans(n_clusters=k)
+    kmeans.fit(hotelesNorm)
+    #calcular el silhouette score
+    silhouette_avg = silhouette_score(hotelesNorm, kmeans.labels_)
+    print("For n_clusters =", k, "The average silhouette_score is :", silhouette_avg)
+
+#------------------------------------------------------------------------------
+##Realizamos KMEANS con 2 clusters 
+#porque el COEFICIENTE DE SILHOUETTE es demasiado similar entre grupos 
+kmeans = KMeans(n_clusters = 2, init = 'k-means++', max_iter = 300,
+                n_init = 10, random_state = 0)
+kmeans.fit(hotelesNorm)
+labels_pred = kmeans.labels_
+labels_true = hoteles['precios']
+
+# Graficamos los valores de la mejor clasificación
+plt.figure(figsize = (10, 7))
+plt.scatter(hotelesNorm['precios'], hotelesNorm['distancia'],
+            c = kmeans.labels_) 
+plt.xlabel('precios')
+plt.ylabel('distancia')
+plt.title('Clustering K-Means con k =' + str(kOptima))
+plt.legend(range(1, kOptima + 1))
+
+
 
 
 
