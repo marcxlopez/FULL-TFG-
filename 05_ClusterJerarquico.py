@@ -19,8 +19,8 @@ from sklearn.metrics import silhouette_score
 
 # =============================================================================
 # Parámetros del modelo: 
-PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
-DATASETS_DIR = PATH + "data\\"
+#PATH = "E:\\DOCENCIA\\TFG Alumnos\\MARC LOPEZ\\REPOSITORIO\\"
+#DATASETS_DIR = PATH + "data\\"
 
 #-----------------------------------------------------------------------
 #Load the data and look at the first few rows
@@ -86,7 +86,7 @@ cluster.fit_predict(hotelesNorm)
 
 # Graficamos los valores de la mejor clasificación
 plt.figure(figsize = (10, 7))  
-plt.scatter(hotelesNorm['precio'], hotelesNorm['distancia'], 
+plt.scatter(hotelesNorm['precios'], hotelesNorm['distancia'], 
             c = cluster.labels_) 
 plt.xlabel('precios')
 plt.ylabel('distancia')

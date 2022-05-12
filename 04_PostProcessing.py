@@ -87,8 +87,8 @@ datan = datan.dropna()
 
 # =============================================================================
 # Añadimos las dos variables faltantes a nuestro datan
-datan['Hotel'] = data['Hotel']
-datan['ratioDescr'] = data['ratioDescr']
+datan['Hotel'] = hoteles['Hotel']
+datan['ratioDescr'] = hoteles['ratioDescr']
 
 # =============================================================================
 # Guardamos en formato de pickle la base de datos 
