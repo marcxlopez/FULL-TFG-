@@ -34,7 +34,7 @@ hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
 #==============================================================================
 #separamos Y del resto de datos 
 y = hoteles['precio']
-X = hoteles.drop(['Hotel','ratioDescr','precio'], axis=1)
+X = hoteles.drop(['Hotel', 'Unnamed: 0', 'ratioDescr','precio'], axis=1)
 
 #convert the dataset into an optimized data structure called Dmatrix
 #  that XGBoost supports 
@@ -143,6 +143,7 @@ def rel_freq(x):
     freqs = [(value, (x.count(value) / len(x))*100) for value in set(x)] 
     return freqs
 
-rel_freq(resultado)
+tabla = pd.DataFrame(rel_freq(resultado), columns =['tipus', 'percent'])
+print(tabla)
 
 #==============================================================================
