@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from xgboost.sklearn import XGBClassifier
 
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
@@ -34,12 +33,12 @@ hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
 
 #==============================================================================
 #separamos Y del resto de datos 
-y = hoteles['precios']
-X = hoteles.drop(['Hotel','ratioDescr','precios'], axis=1)
+y = hoteles['precio']
+X = hoteles.drop(['Hotel','ratioDescr','precio'], axis=1)
 
 #convert the dataset into an optimized data structure called Dmatrix
 #  that XGBoost supports 
-data_dmatrix = xgb.DMatrix(data=X,label=y)
+# data_dmatrix = xgb.DMatrix(data = X, label = y)
 
 #Divide dataset intro TRAIN and TEST 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
@@ -56,85 +55,94 @@ preds = xg_reg.predict(X_test)
 rmse = np.sqrt(mean_squared_error(y_test, preds))
 print("RMSE: %f" % (rmse))
 
+# -----------------------------------------------------------------------------
+# Creamos una función para calcular 3 estados: 
+#   - Acierto
+#   - Fallo por abajo
+#   - Fallo por encima
+
 
 #==============================================================================
-
 ###k-fold Cross Validation using XGBoost
 #to build more robust models, it is common to do a k-fold cross validation
 # where all the entries in the original training dataset are used for both training as well as validation
-params = {"objective":"reg:linear",'colsample_bytree': 0.3,'learning_rate': 0.1,
-                'max_depth': 5, 'alpha': 10}
+xgb1 = xgb.XGBRegressor()
+parameters = {'nthread':[4], #when use hyperthread, xgboost may become slower
+              'objective':['reg:linear'],
+              'learning_rate': [.03, 0.05, .07], # so called `eta` value
+              'max_depth': [5, 6, 7],
+              'min_child_weight': [4],
+              'silent': [1],
+              'subsample': [0.7],
+              'colsample_bytree': [0.7],
+              'n_estimators': [500]}
 
-cv_results = xgb.cv(dtrain=data_dmatrix, params=params, nfold=3,
-                    num_boost_round=50,early_stopping_rounds=10,metrics="rmse", as_pandas=True, seed=123)
+xgb_grid = GridSearchCV(xgb1,
+                        parameters,
+                        cv = 10,
+                        n_jobs = 5,
+                        verbose = True)
 
-print((cv_results["test-rmse-mean"]).tail(1))
+xgb_grid.fit(X_train, y_train)
 
-
+print(xgb_grid.best_score_)
+print(xgb_grid.cv_results_)
+print(xgb_grid.best_params_)
 
 #==============================================================================
 ###Visualize Boosting Trees and Feature Importance
-xg_reg = xgb.train(params=params, dtrain=data_dmatrix, num_boost_round=10)
+xg_reg = xgb.train(params=xgb_grid.best_params_, 
+                   dtrain = xgb.DMatrix(data = X_train, label = y_train), 
+                   num_boost_round = 100)
 
+# -----------------------------------------------------------------------------
 #Plotting the first tree
 #xgb.plot_tree(xg_reg,num_trees=0)
 #plt.rcParams['figure.figsize'] = [50, 10]
 #plt.show()
 #module 'graphviz.backend' has no attribute 'ENCODING'
 
-
+# -----------------------------------------------------------------------------
 ###examine the importance of each feature column in the original dataset
 xgb.plot_importance(xg_reg)
 plt.rcParams['figure.figsize'] = [5, 5]
 plt.show()
 
+# -----------------------------------------------------------------------------
+# Calculamos las predicciones finales 
+#Fit the regressor to the training set and make predictions on the test set
+preds = xg_reg.predict(xgb.DMatrix(data = X_test))
+
+# -----------------------------------------------------------------------------
+#Compute the rmse by invoking the mean_sqaured_error function
+rmse = np.sqrt(mean_squared_error(y_test, preds))
+print("RMSE: %f" % (rmse))
+
+# -----------------------------------------------------------------------------
+# Creamos una función para calcular 3 estados: 
+#   - Acierto
+#   - Fallo por abajo
+#   - Fallo por encima
+factor = 0.1
+
+dataset = pd.DataFrame({'ICinf': y_test - y_test*factor, 
+                        'ICsup': y_test + y_test*factor})
+dataset.reset_index(inplace=True)
+dataset = dataset.drop(['index'], axis=1)
+
+resultado = []
+for i in range(0, len(y_test)):
+    if dataset.loc[i, 'ICinf'] <= preds[i] and dataset.loc[i, 'ICsup'] >= preds[i]:
+        resultado.append("OK")
+    if dataset.loc[i, 'ICinf'] >= preds[i]:
+        resultado.append("Subvalorado")
+    if dataset.loc[i, 'ICsup'] <= preds[i]:
+        resultado.append("Sobrevalorado")
+    
+def rel_freq(x):
+    freqs = [(value, (x.count(value) / len(x))*100) for value in set(x)] 
+    return freqs
+
+rel_freq(resultado)
+
 #==============================================================================
-
-
-
-#==============================================================================
-param_test1 = {
- 'max_depth':range(3,10,2),
- 'min_child_weight':range(1,6,2)
-}
-gsearch1 = GridSearchCV(estimator = XGBClassifier( learning_rate =0.1, n_estimators=140, max_depth=5,
- min_child_weight=1, gamma=0, subsample=0.8, colsample_bytree=0.8,
- objective= 'binary:logistic', nthread=4, scale_pos_weight=1, seed=27),     
- param_grid = param_test1, scoring='roc_auc',n_jobs=4, cv=5)
-
-gsearch1.fit(X_train,y_train)
-gsearch1.cv_results_, gsearch1.best_params_, gsearch1.best_score_
-
-#------------------------------------------------------------------------------
-param_test2 = {
- 'max_depth':[4,5,6],
- 'min_child_weight':[4,5,6]
-}
-gsearch2 = GridSearchCV(estimator = XGBClassifier( learning_rate=0.1, n_estimators=140, max_depth=5,
- min_child_weight=2, gamma=0, subsample=0.8, colsample_bytree=0.8,
- objective= 'binary:logistic', nthread=4, scale_pos_weight=1,seed=27), 
- param_grid = param_test2, scoring='roc_auc',n_jobs=4, cv=5)
-gsearch2.fit(X_train,y_train)
-gsearch2.cv_results_, gsearch2.best_params_, gsearch2.best_score_
-
-#------------------------------------------------------------------------------
-param_test2b = {
- 'min_child_weight':[6,8,10,12]
-}
-gsearch2b = GridSearchCV(estimator = XGBClassifier( learning_rate=0.1, n_estimators=140, max_depth=4,
- min_child_weight=2, gamma=0, subsample=0.8, colsample_bytree=0.8,
- objective= 'binary:logistic', nthread=4, scale_pos_weight=1,seed=27), 
- param_grid = param_test2b, scoring='roc_auc',n_jobs=4, cv=5)
-
-gsearch2b.fit(X_train,y_train)
-gsearch2b.cv_results_, gsearch2b.best_params_, gsearch2b.best_score_
-###############################################################################
-param_test3 = {
- 'gamma':[i/10.0 for i in range(0,5)]
-}
-gsearch3 = GridSearchCV(estimator = XGBClassifier( learning_rate =0.1, n_estimators=140, max_depth=4,
- min_child_weight=6, gamma=0, subsample=0.8, colsample_bytree=0.8,
- objective= 'binary:logistic', nthread=4, scale_pos_weight=1,seed=27), 
- param_grid = param_test3, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
-gsearch3.fit(train[predictors],train[target])
-gsearch3.grid_scores_, gsearch3.best_params_, gsearch3.best_score_
