@@ -137,5 +137,29 @@ plt.legend(range(1, kOptima + 1))
 
 
 
+###PROFILING-------------------------------------------------------------------
+df_features = hotelesNorm
+# Add cluster labels
+df_features['cluster_ids'] = kmeans.labels_
 
+# Overall level summary
+df_profile_overall = df_features.describe().T
+
+# using mean; use appropriate summarization (median, count, etc.) for each feature
+df_profile_overall['Overall Dataset'] = df_profile_overall[['mean']]
+df_profile_overall = df_profile_overall[['Overall Dataset']]
+
+# Cluster ID level summary
+df_cluster_summary = df_features.groupby('cluster_ids').describe().T.reset_index()
+df_cluster_summary = df_cluster_summary.rename(columns={'level_0':'column','level_1':'metric'})
+
+# using mean; use appropriate summarization (median, count, etc.) for each feature
+df_cluster_summary = df_cluster_summary[df_cluster_summary['metric'] == "mean"]
+df_cluster_summary = df_cluster_summary.set_index('column')
+
+# join into single summary dataset
+df_profile = df_cluster_summary.join(df_profile_overall) # joins on Index
+
+#cluster 0 == precios bajos, mucha distancia al mar 
+#cluster 1 == precios medios altos, mas cerca del mar, mas habitaciones
 
