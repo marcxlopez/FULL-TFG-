@@ -34,7 +34,7 @@ hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
 #==============================================================================
 #separamos Y del resto de datos 
 y = hoteles['precio']
-X = hoteles.drop(['Hotel', 'Unnamed: 0', 'ratioDescr','precio'], axis=1)
+X = hoteles.drop(['Hotel', 'Unnamed: 0', 'Unnamed: 5', 'ratioDescr','precio'], axis=1)
 
 #convert the dataset into an optimized data structure called Dmatrix
 #  that XGBoost supports 
