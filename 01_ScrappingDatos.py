@@ -21,7 +21,7 @@ from urllib.parse import parse_qs
 
 PATH = r"C:\Users\marcl\Desktop\TFG\WEB SCRAPPING\webscrapping2\chromedriver.exe"
 DATASETS_DIR = r"C:\\Users\\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG\\data"
-DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'
+DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'######IR CAMBIANDO NUMERO 
 
 
 OPTIONS = webdriver.ChromeOptions()
@@ -56,9 +56,9 @@ hab = 1
 senior = 2
 child = 0
 id_poblacio = "1641629" 
-check_in = datetime.strptime('2022-07-01', "%Y-%m-%d")
-check_out = datetime.strptime('2022-07-02', "%Y-%m-%d")
-check_Final = datetime.strptime('2022-07-5',"%Y-%m-%d")
+check_in = datetime.strptime('2022-07-06', "%Y-%m-%d")
+check_out = datetime.strptime('2022-07-07', "%Y-%m-%d")
+check_Final = datetime.strptime('2022-07-07',"%Y-%m-%d")
 sigo = True 
 
 #empezamos bucle de dias 
