@@ -23,7 +23,7 @@ hotelesNorm = pd.read_pickle(DATASETS_DIR + 'HotelesNormalizados.pkl')
 hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
 i = 0
 distancia_R = []
-dist_R = 100
+#dist_R = 100
 #crear una funcion que recoja la variable distancia 
 def recomender(dist_R):
     i = 0
@@ -38,5 +38,4 @@ def recomender(dist_R):
     Recomender['Distancia_R'] = distancia_R
     Recomender['Nombre'] = hoteles['Hotel']
     #ordenar Recomender['Distancia_R'] de menor a mayor 
-    Recomender = Recomender.sort_values(by=['Distancia_R'])    
-
+    #Recomender = Recomender.sort_values(by=['Distancia_R'])    
