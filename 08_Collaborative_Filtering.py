@@ -21,21 +21,30 @@ DATASETS_DIR = PATH + "data\\"
 # Cargamos la base de datos
 hotelesNorm = pd.read_pickle(DATASETS_DIR + 'HotelesNormalizados.pkl')
 hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
+
+#dist_R = 100
+#crear una funcion que recoja la variable distancia 
 i = 0
 distancia_R = []
-#dist_R = 100
+Nombre_H = []
+dist_R = 100
+hoteles = hoteles.reset_index()
+
 #crear una funcion que recoja la variable distancia 
 def recomender(dist_R):
     i = 0
-    while i<701:
-        #append spatial.distance.euclidean(hoteles['distancia'][i], dist_R) in hoteles['Euclidean_d']
-        try: 
-            distancia_R.append(spatial.distance.euclidean(hoteles['distancia'][i], dist_R))
-            i = i + 1
-        except KeyError:
-            i = i + 1
+    
+    while i<701: #aqui en vez de 701 introducir el numero de hoteles
+        distancia_R.append(spatial.distance.euclidean(hoteles['distancia'][i], dist_R))
+        Nombre_H.append(hoteles['Hotel'][i])
+           
     Recomender = pd.DataFrame()            
     Recomender['Distancia_R'] = distancia_R
-    Recomender['Nombre'] = hoteles['Hotel']
+    Recomender['Nombre'] = Nombre_H
     #ordenar Recomender['Distancia_R'] de menor a mayor 
-    #Recomender = Recomender.sort_values(by=['Distancia_R'])    
+    #Recomender = Recomender.sort_values(by=['Distancia_R']) 
+recomender(100)
+Recomender = pd.DataFrame()
+Recomender['Nombre'] = Nombre_H
+Recomender['Distancia'] = distancia_R
+Recomender = Recomender.sort_values(by=['Distancia'])
