@@ -4,30 +4,33 @@ library(dplyr)
 library(StatMatch)
 
 # Cargamos los datos necesarios
-path <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
+#path <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
+path <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/data/'
 datos <- read.csv2(paste0(path, 'HotelesImputados.csv'))
 
 vars <- c("Hotel", "Estrellas", "Aceptan.Mascotas", "Aire.Acondicionado", "Aparcamiento.Disponible",
-          "Aparcamiento.Gratis", "Cocina", "Cocina.BÃ.sica", "Desayuno.Gratis", "Gimnasio", 
-          "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precio",
+          "Aparcamiento.Gratis", "Cocina.Básica", "Desayuno.Gratis", "Gimnasio", 
+          "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precios",
           "ratioDescr")
 
 vars2 <- c("Estrellas", "Aceptan.Mascotas", "Aire.Acondicionado", "Aparcamiento.Disponible",
-           "Aparcamiento.Gratis", "Cocina", "Desayuno.Gratis", "Gimnasio", 
-           "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precio",
+           "Aparcamiento.Gratis", "Cocina.Básica", "Desayuno.Gratis", "Gimnasio", 
+           "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precios",
            "ratioDescr")
 
 vars3 <- c("Aceptan.Mascotas", "Aire.Acondicionado", "Aparcamiento.Disponible",
-           "Aparcamiento.Gratis", "Cocina", "Desayuno.Gratis", "Gimnasio", 
+           "Aparcamiento.Gratis", "Cocina.Básica", "Desayuno.Gratis", "Gimnasio", 
            "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis")
 
 vars4 <- c("Hotel", "Estrellas", "Aceptan.Mascotas", "Aire.Acondicionado", "Aparcamiento.Disponible",
-           "Aparcamiento.Gratis", "Cocina", "Desayuno.Gratis", "Gimnasio", 
-           "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precio",
+           "Aparcamiento.Gratis", "Cocina.Básica", "Desayuno.Gratis", "Gimnasio", 
+           "Para.No.Fumadores", "Piscina", "Traslado.Al.Aeropuerto", "Wifi.Gratis", "precios",
            "ratioDescr")
 
+#vars[which(!vars %in% colnames(datos))]
+
 datos <- datos[, vars]
-datos$precio <- as.numeric(datos$precio)
+datos$precios <- as.numeric(datos$precios)
 
 for (var in vars3) {
     datos[, var] <- ifelse(datos[, var] == 1, "Si", "No")
@@ -118,14 +121,14 @@ server <- function(input, output) {
                            "Aire.Acondicionado" = input$aire, 
                            "Aparcamiento.Disponible" = input$aparDispo,
                            "Aparcamiento.Gratis" = input$aparGratis, 
-                           "Cocina" = input$cocina, 
+                           "Cocina.Básica" = input$cocina, 
                            "Desayuno.Gratis" = input$desayuno, 
                            "Gimnasio" = input$gym, 
                            "Para.No.Fumadores" = input$fumadores, 
                            "Piscina" = input$piscina,
                            "Traslado.Al.Aeropuerto" = input$aero, 
                            "Wifi.Gratis" = input$wifi, 
-                           "precio" = input$precio,
+                           "precios" = input$precio,
                            "ratioDescr" = input$coments)
         data <- data[, vars2]
         return(data)
@@ -153,3 +156,4 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
