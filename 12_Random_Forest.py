@@ -390,3 +390,28 @@ ax.plot(
 )
 ax.set_title('Importancia de los predictores (train)')
 ax.set_xlabel('Incremento del error tras la permutación');
+
+###############################################################################
+modelo = RandomForestRegressor(
+            n_estimators = 121,
+            criterion    = 'mse',
+            max_depth    = None,
+            max_features = 2,
+            oob_score    = False,
+            n_jobs       = -1,
+            random_state = 123
+         )
+
+# Entrenamiento del modelo
+# ==============================================================================
+modelo.fit(X_train, y_train)
+# Error de test del modelo inicial
+# ==============================================================================
+predicciones = modelo.predict(X = X_test)
+
+rmse = mean_squared_error(
+        y_true  = y_test,
+        y_pred  = predicciones,
+        squared = False
+       )
+print(f"El error (rmse) de test es: {rmse}")
