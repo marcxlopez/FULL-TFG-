@@ -44,7 +44,7 @@ OUTPUT_DIR = PATH + "output\\"
 # =============================================================================
 # Cargamos los datos que hemos scrappeado
 hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesPreprocesados.pkl')
-
+hoteles = hoteles.dropna(subset=['precios'], axis=0)
 # -----------------------------------------------------------------------------
 # Cargamos el csv con las distancias
 distancias = pd.read_csv(DATASETS_DIR + 'DistanciaHoteles.csv', encoding="UTF-8", sep = ";")
