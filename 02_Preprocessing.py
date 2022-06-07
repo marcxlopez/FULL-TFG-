@@ -14,7 +14,6 @@ import string
 from tabulate import tabulate
 import geopy.distance
 from datetime import timedelta
-
 # from math import sin, cos, sqrt, atan2, radians
 # =============================================================================
 # PARAMETROS SERGI:
@@ -29,11 +28,12 @@ OUTPUT_DIR = PATH + "output\\"
 
 # =============================================================================
 # Cargamos los datos que hemos scrappeado
-hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesIBIZA.pkl')
-
+hoteles1 = pd.read_pickle(DATASETS_DIR + 'HotelesDATA.pkl')
+hoteles = hoteles1.reset_index()
 # =============================================================================
 # Realizamos el PREPROCESSING:
 ### Hotel 
+hoteles = hoteles.dropna(axis = 0, subset = ['coordenadas'], )
 hotelPR = pd.DataFrame(hoteles.Hotel)
 
 # -----------------------------------------------------------------------------
@@ -76,8 +76,8 @@ hotelPR['Ratio'] = [float(re.sub(",", "", rat)) if rat != '' else float("nan") f
 
 # -----------------------------------------------------------------------------
 ### Ratio_descr 
-print(tabulate(pd.crosstab(index = hoteles['Ratio_descr'], columns = "count"), 
-               headers = 'firstrow', tablefmt = 'fancy_grid'))
+#print(tabulate(pd.crosstab(index = hoteles['Ratio_descr'], columns = "count"), 
+               #headers = 'firstrow', tablefmt = 'fancy_grid'))
 hotelPR['ratioDescr'] = hoteles['Ratio_descr']
 
 # -----------------------------------------------------------------------------
@@ -85,12 +85,12 @@ hotelPR['ratioDescr'] = hoteles['Ratio_descr']
 #### No lo vamos a utilizar
 
 # -----------------------------------------------------------------------------
-### Ammenities 
+### Ammenities #####
 ammenities = [am.split("\n") for am in hoteles['Ammenities']]
 df = pd.get_dummies(pd.DataFrame(ammenities))
 df.columns = df.columns.str.split("_").str[-1]
 df = df.groupby(df.columns.map(string.capwords), axis=1).sum()
-hotelPR = pd.concat([hotelPR, df], axis = 1)
+hotelPR = pd.concat([hoteles, df], axis = 1) ### y los NaN porque vuelven??
 
 # -----------------------------------------------------------------------------
 ### Servicios_Principales 
@@ -161,7 +161,8 @@ hotelPR['ratioHabPlanta'] = hotelPR['habitaciones']/hotelPR['Plantas']
 
 # -----------------------------------------------------------------------------
 ### coordenadas 
-hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenadas']]
+
+hotelPR['latitud'] = [float(hot[0].split(",")[0]) for hot in hoteles['coordenadas']] 
 hotelPR['longitud'] = [float(hot[0].split(",")[1]) for hot in hoteles['coordenadas']]
 
 #### Calculamos la distancia entre puntos de interes
@@ -211,6 +212,7 @@ hotelPR['precios'] = [x if x > 0 else float("nan") for x in hotelPR['precios']]
 
 #NO ME FUNCIONA ESTO 
 #hotelPR['precio'] = [float(re.sub(" €", "", pr)) if pr != '' else float("nan") for pr in hoteles['precio']]
+
 
 
 # =============================================================================
