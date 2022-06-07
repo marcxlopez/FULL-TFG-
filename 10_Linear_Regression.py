@@ -158,7 +158,7 @@ predicciones.head(4)
 # Predicciones con intervalo de confianza del 95%
 # ==============================================================================
 predicciones = modelo.get_prediction(exog = X_train).summary_frame(alpha=0.05)
-predicciones['x'] = X_train['distancia']##
+predicciones['x'] = X_train[:,1]
 predicciones['y'] = y_train
 predicciones = predicciones.sort_values('x')
 
