@@ -2,7 +2,11 @@
 library(shiny)
 library(dplyr)
 library(StatMatch)
-
+library(shinydashboard)
+#if (interactive()) {
+#  library(shiny)
+#  library(shinydashboard)
+#  library(shinydashboardPlus)
 # Cargamos los datos necesarios
 #path <- 'E:/DOCENCIA/TFG Alumnos/MARC LOPEZ/REPOSITORIO/data/'
 path <- 'C:/Users/marcl/Desktop/TFG/GITHUB TFG/data/'
@@ -36,12 +40,10 @@ for (var in vars3) {
     datos[, var] <- ifelse(datos[, var] == 1, "Si", "No")
 }
 
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Recomendador de Hoteles"),
-
+    
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
@@ -141,8 +143,9 @@ server <- function(input, output) {
         v <- datosEscogidos()
         matrisfin <- rbind(v, matriz)
         print(matrisfin)
+        
         dists <- gower.dist(data.x = matrisfin[1, ], 
-                            data.y = matrisfin[-1, ])^2
+                            data.y = matrisfin[-1, ])^2 ##
         matriz3 <- matriz2[order(dists)[1:input$n], ] 
         print(matriz3)
         return(matriz3)
@@ -154,6 +157,5 @@ server <- function(input, output) {
 
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+
 

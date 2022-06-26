@@ -35,25 +35,32 @@ warnings.filterwarnings('once')
 #Cargamos datos 
 PATH = "C:\\Users\marcl\\Desktop\\TFG\\GITHUB TFG\\"
 DATASETS_DIR = PATH + "data\\"
-hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesModelos.pkl')
+hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
 hoteles = hoteles.dropna(subset=['precios'], axis=0)
 #juntamos los datos en un DataFrame
-x = pd.DataFrame()
-x['Estrellas'] = hoteles['Estrellas']
-x['precios'] = hoteles['precios']
-x['distancia'] = hoteles['distancia']
-x.info()
-# División de los datos en train y test
-# ==============================================================================
-X_train, X_test, y_train, y_test = train_test_split(
-                                        x.drop(columns= "precios"),
-                                        x['precios'],
-                                        random_state = 123
-                                    )
+# x = pd.DataFrame()
+# x['Estrellas'] = hoteles['Estrellas']
+# x['precios'] = hoteles['precios']
+# x['distancia'] = hoteles['distancia']
+# x.info()
+# # División de los datos en train y test
+#separamos Y del resto de datos 
+y = hoteles['precios']
+X = hoteles.drop(['Hotel', 'ratioDescr','precios'], axis=1)
+
+#Divide dataset intro TRAIN and TEST 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+# # ==============================================================================
+# X_train, X_test, y_train, y_test = train_test_split(
+#                                         x.drop(columns= "precios"),
+#                                         x['precios'],
+#                                         random_state = 123
+
+#                                     )
 # Creación del modelo
 # ==============================================================================
 modelo = RandomForestRegressor(
-            n_estimators = 10,
+            n_estimators = 5,
             criterion    = 'mse',
             max_depth    = None,
             max_features = 'auto',
@@ -75,6 +82,7 @@ rmse = mean_squared_error(
         squared = False
        )
 print(f"El error (rmse) de test es: {rmse}")
+###############################################################################
 # Validación empleando el Out-of-Bag error
 # ==============================================================================
 train_scores = []
@@ -110,6 +118,7 @@ ax.set_xlabel("n_estimators")
 ax.set_title("Evolución del out-of-bag-error vs número árboles")
 plt.legend();
 print(f"Valor óptimo de n_estimators: {estimator_range[np.argmax(oob_scores)]}")
+###############################################################################
 # Validación empleando k-cross-validation y neg_root_mean_squared_error
 # ==============================================================================
 train_scores = []
@@ -256,8 +265,8 @@ print(f"Valor óptimo de max_features: {max_features_range[np.argmin(cv_scores)]
 # Grid de hiperparámetros evaluados
 # ==============================================================================
 param_grid = ParameterGrid(
-                {'n_estimators': [121],
-                 'max_features': [2],
+                {'n_estimators': [21],
+                 'max_features': [4],
                  'max_depth'   : [None, 3, 10, 20]
                 }
              )
@@ -295,49 +304,74 @@ print("Mejores hiperparámetros encontrados (oob-r2)")
 print("--------------------------------------------")
 print(resultados.iloc[0,0], ":", resultados.iloc[0,:]['oob_r2'], "R2")
 
+###############################################################################
+# #GridSearch en validación cruzada 
+# # Grid de hiperparámetros evaluados
+# # ==============================================================================
+# param_grid = {'n_estimators': [21],
+#               'max_features': [4],
+#               'max_depth'   : [None, 3, 10, 20]
+#              }
 
-#GridSearch en validación cruzada 
-# Grid de hiperparámetros evaluados
-# ==============================================================================
-param_grid = {'n_estimators': [121],
-              'max_features': [2],
-              'max_depth'   : [None, 3, 10, 20]
-             }
+# # Búsqueda por grid search con validación cruzada
+# # ==============================================================================
+# grid = GridSearchCV(
+#         estimator  = RandomForestRegressor(random_state = 123),
+#         param_grid = param_grid,
+#         scoring    = 'neg_root_mean_squared_error',
+#         n_jobs     = multiprocessing.cpu_count() - 1,
+#         cv         = RepeatedKFold(n_splits=5, n_repeats=3, random_state=123), 
+#         refit      = True,
+#         verbose    = 0,
+#         return_train_score = True
+#        )
 
-# Búsqueda por grid search con validación cruzada
-# ==============================================================================
-grid = GridSearchCV(
-        estimator  = RandomForestRegressor(random_state = 123),
-        param_grid = param_grid,
-        scoring    = 'neg_root_mean_squared_error',
-        n_jobs     = multiprocessing.cpu_count() - 1,
-        cv         = RepeatedKFold(n_splits=5, n_repeats=3, random_state=123), 
-        refit      = True,
-        verbose    = 0,
-        return_train_score = True
-       )
+# grid.fit(X = X_train, y = y_train)
 
-grid.fit(X = X_train, y = y_train)
-
-# Resultados
-# ==============================================================================
-resultados = pd.DataFrame(grid.cv_results_)
-resultados.filter(regex = '(param.*|mean_t|std_t)') \
-    .drop(columns = 'params') \
-    .sort_values('mean_test_score', ascending = False) \
-    .head(4)
+# # Resultados
+# # ==============================================================================
+# resultados = pd.DataFrame(grid.cv_results_)
+# resultados.filter(regex = '(param.*|mean_t|std_t)') \
+#     .drop(columns = 'params') \
+#     .sort_values('mean_test_score', ascending = False) \
+#     .head(4)
     
-# Mejores hiperparámetros por validación cruzada
+# # Mejores hiperparámetros por validación cruzada
+# # ==============================================================================
+# print("----------------------------------------")
+# print("Mejores hiperparámetros encontrados (cv)")
+# print("----------------------------------------")
+# print(grid.best_params_, ":", grid.best_score_, grid.scoring)
+# #Yo pensaba que era el de max depth = 10
+# # Error de test del modelo final
+# # ==============================================================================
+# modelo_final = grid.best_estimator_
+# predicciones = modelo.predict(X = X_test)
+# rmse = mean_squared_error(
+#         y_true  = y_test,
+#         y_pred  = predicciones,
+#         squared = False
+#        )
+# print(f"El error (rmse) de test es: {rmse}")
+###############################################################################
+###############################################################################
+modelo = RandomForestRegressor(
+            n_estimators = 146,
+            criterion    = 'mse',
+            max_depth    = 20,
+            max_features = None,
+            oob_score    = False,
+            n_jobs       = -1,
+            random_state = 123
+         )
+
+# Entrenamiento del modelo
 # ==============================================================================
-print("----------------------------------------")
-print("Mejores hiperparámetros encontrados (cv)")
-print("----------------------------------------")
-print(grid.best_params_, ":", grid.best_score_, grid.scoring)
-#Yo pensaba que era el de max depth = 10
-# Error de test del modelo final
+modelo_final.fit(X_train, y_train)
+# Error de test del modelo inicial
 # ==============================================================================
-modelo_final = grid.best_estimator_
 predicciones = modelo.predict(X = X_test)
+
 rmse = mean_squared_error(
         y_true  = y_test,
         y_pred  = predicciones,
@@ -345,9 +379,11 @@ rmse = mean_squared_error(
        )
 print(f"El error (rmse) de test es: {rmse}")
 
+
+##############################################################################
 ##Importancia de los predictores por PUREZA DE NODOS 
 importancia_predictores = pd.DataFrame(
-                            {'predictor': x.drop(columns= "precios").columns,
+                            {'predictor': X.columns,
                              'importancia': modelo.feature_importances_}
                             )
 print("Importancia de los predictores en el modelo")
@@ -390,28 +426,3 @@ ax.plot(
 )
 ax.set_title('Importancia de los predictores (train)')
 ax.set_xlabel('Incremento del error tras la permutación');
-
-###############################################################################
-modelo = RandomForestRegressor(
-            n_estimators = 121,
-            criterion    = 'mse',
-            max_depth    = None,
-            max_features = 2,
-            oob_score    = False,
-            n_jobs       = -1,
-            random_state = 123
-         )
-
-# Entrenamiento del modelo
-# ==============================================================================
-modelo.fit(X_train, y_train)
-# Error de test del modelo inicial
-# ==============================================================================
-predicciones = modelo.predict(X = X_test)
-
-rmse = mean_squared_error(
-        y_true  = y_test,
-        y_pred  = predicciones,
-        squared = False
-       )
-print(f"El error (rmse) de test es: {rmse}")

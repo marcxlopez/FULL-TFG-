@@ -126,3 +126,4 @@ report = cluster_report(hotelesNorm, cluster.labels_)
 print(report)
 report2 = cluster_report(hotelesNorm, kmeans.labels_ )
 
+

@@ -20,8 +20,8 @@ from urllib.parse import parse_qs
 #web scrapper MARC
 
 PATH = r"C:\Users\marcl\Desktop\TFG\WEB SCRAPPING\webscrapping2\chromedriver.exe"
-DATASETS_DIR = r"C:\\Users\\marcl\\Desktop\\TFG\\GITHUB TFG\\PREPROCESSING-TFG\\data"
-DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA'######IR CAMBIANDO NUMERO 
+#DATASETS_DIR = r"C:\Users\\marcl\Desktop\TFG\GITHUB TFG\PREPROCESSING-TFG\data"
+#DATASETS_RAW_DIR = f'{DATASETS_DIR}\\HotelesIBIZA2'######IR CAMBIANDO NUMERO 
 
 
 OPTIONS = webdriver.ChromeOptions()
@@ -56,9 +56,9 @@ hab = 1
 senior = 2
 child = 0
 id_poblacio = "1641629" 
-check_in = datetime.strptime('2022-07-06', "%Y-%m-%d")
-check_out = datetime.strptime('2022-07-07', "%Y-%m-%d")
-check_Final = datetime.strptime('2022-07-07',"%Y-%m-%d")
+check_in = datetime.strptime('2022-08-10', "%Y-%m-%d")
+check_out = datetime.strptime('2022-08-11', "%Y-%m-%d")
+check_Final = datetime.strptime('2022-08-31',"%Y-%m-%d")
 sigo = True 
 
 #empezamos bucle de dias 
@@ -273,7 +273,7 @@ dict = {'Hotel': nombresHotel, 'checkIn': checkIn, 'checkOut': checkOut,
 hoteles = pd.DataFrame(dict)
 
 # Guardamos en csv los datos
-hoteles.to_csv(DATASETS_RAW_DIR + '.csv', sep = ";", decimal = ".")
-
+#hoteles.to_csv(DATASETS_RAW_DIR + '.csv', sep = ";", decimal = ".")
+hoteles.to_csv(r'C:\Users\marcl\Desktop\TFG\GITHUB TFG\data\HotelesIBIZA4.csv', sep=";", decimal = ".")
 # Guardamos en formato de pickle
-hoteles.to_pickle(DATASETS_RAW_DIR + ".pkl")
+hoteles.to_pickle(r'C:\Users\marcl\Desktop\TFG\GITHUB TFG\data\HotelesIBIZA4.pkl')

@@ -35,11 +35,13 @@ DATASETS_DIR = PATH + "data\\"
 # =============================================================================
 # Cargamos la base de datos
 hotelesNorm = pd.read_pickle(DATASETS_DIR + 'HotelesNormalizados.pkl')
-hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesModelos.pkl')
-x = pd.DataFrame()
-x['Estrellas'] = hoteles['Estrellas']
-x['precios'] = hoteles['precios']
-x['distancia'] = hoteles['distancia']
+hoteles = pd.read_pickle(DATASETS_DIR + 'HotelesImputados.pkl')
+#x = pd.DataFrame()
+#x['Estrellas'] = hoteles['Estrellas']
+#x['precios'] = hoteles['precios']
+#x['distancia'] = hoteles['distancia']
+
+x = hoteles.drop(['Hotel', 'ratioDescr'], axis=1)
 # División de los datos en train y test
 # ------------------------------------------------------------------------------
 X_train, X_test, y_train, y_test = train_test_split(
@@ -152,3 +154,5 @@ rmse = mean_squared_error(
         squared = False
        )
 print(f"El error (rmse) de test es: {rmse}")
+
+

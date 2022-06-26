@@ -82,9 +82,14 @@ plt.xlabel('precios')
 plt.ylabel('distancia')
 plt.title('Clustering K-Means con k = 3')
 plt.legend(range(1, kOptima + 1))
+###Adjusted Rand Index 
+labels_pred = kmeans.labels_
+labels_true = hoteles['precios']
+from sklearn.metrics.cluster import adjusted_rand_score
+adjusted_rand_score(labels_true, labels_pred)
 #------------------------------------------------------------------------------
-#Realizamos KMEANS para 7 clusters 
-kmeans = KMeans(n_clusters = 7, init = 'k-means++', max_iter = 300,
+#Realizamos KMEANS para 6 clusters 
+kmeans = KMeans(n_clusters = 6, init = 'k-means++', max_iter = 300,
                 n_init = 10, random_state = 0)
 kmeans.fit(hotelesNorm)
 labels_pred = kmeans.labels_
@@ -96,5 +101,10 @@ plt.scatter(hotelesNorm['precios'], hotelesNorm['distancia'],
             c = kmeans.labels_) 
 plt.xlabel('precios')
 plt.ylabel('distancia')
-plt.title('Clustering K-Means con k = 7')
+plt.title('Clustering K-Means con k = 6')
 plt.legend(range(1, kOptima + 1))
+###Adjusted Rand Index 
+labels_pred = kmeans.labels_
+labels_true = hoteles['precios']
+from sklearn.metrics.cluster import adjusted_rand_score
+adjusted_rand_score(labels_true, labels_pred)
